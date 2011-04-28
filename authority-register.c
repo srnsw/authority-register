@@ -172,7 +172,7 @@ void create_db (sqlite3 *db) {
 
 // Simple callback designed to print the first result of a SELECT statement
 int printresult (void* param, int argc, char** argv, char** col_name) {
-    printf(argv[0]);
+    fprintf(stdout, argv[0]);
     return 0;
 }
 
@@ -197,7 +197,7 @@ void deregister(sqlite3 *db, bstring type, bstring id) {
     stmt = bformat("DELETE FROM %s WHERE ID=%s;", bdata(type), bdata(id));
     execute_statement(db, bdata(stmt));
     // Print out the number deleted
-    printf(bdata(id));
+    fprintf(stdout, bdata(id));
    
     bdestroy(stmt);
     return; 
@@ -355,40 +355,40 @@ int main (int argc, char **argv) {
             case 'n':
                 if (table_name = make_table_name(optarg)) {
                     register_new(db, table_name);
-                    printf("%d", sqlite3_last_insert_rowid(db));
+                    fprintf(stdout, "%d", sqlite3_last_insert_rowid(db));
                 } else
-                    printf(usage);
+                    fprintf(stderr, usage);
                 break;
             case 'r':
                 if ((table_name = make_table_name(optarg)) &&
                     (id_number = make_id_number(optarg))) {
                     deregister(db, table_name, id_number);
                 } else
-                    printf(usage);
+                    fprintf(stderr, usage);
                 break;
             case 'v':
                 if ((table_name = make_table_name(optarg)) &&
                     (id_number = make_id_number(optarg))) {
                     increment(db, table_name, id_number);
                 } else
-                    printf(usage);
+                    fprintf(stderr, usage);
                 break;
             case 'd':
                 if ((table_name = make_table_name(optarg)) &&
                     (id_number = make_id_number(optarg))) {
                     decrement(db, table_name, id_number);
                 } else
-                    printf(usage);
+                    fprintf(stderr, usage);
                 break;
             case 's':
                 if ((table_name = make_table_name(optarg)) &&
                     (id_number = make_id_number(optarg))) {
                     seed(db, table_name, id_number);
                 } else
-                    printf(usage);
+                    fprintf(stderr, usage);
                 break;
             default:
-                printf(usage);
+                fprintf(stderr, usage);
                 break;
         } 
     }
