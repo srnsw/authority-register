@@ -189,15 +189,16 @@ void register_new(sqlite3 *db, bstring type) {
 }
 
 // Remove a row from a table: in case an FA/GA/AR is accidentally registered
+// If row exists, it is printed to the output.
 // Note: the ID 'de-registered' will only be available for re-use if it is the latest 
 // row in the table. 
 void deregister(sqlite3 *db, bstring type, bstring id) {
     bstring stmt;
    
-    stmt = bformat("DELETE FROM %s WHERE ID=%s;", bdata(type), bdata(id));
-    execute_statement(db, bdata(stmt));
-    // Print out the number deleted
-    fprintf(stdout, bdata(id));
+    stmt = bformat("SELECT ID FROM %s WHERE ID=%s;" 
+        "DELETE FROM %s WHERE ID=%s;", bdata(type), bdata(id),
+        bdata(type), bdata(id));
+    execute_c_statement(db, bdata(stmt), &printresult, NULL);
    
     bdestroy(stmt);
     return; 
