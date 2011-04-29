@@ -148,17 +148,17 @@ void write_report (bstring exe_path, sqlite3 *db) {
 // Create a new SQLITE database with three tables
 void create_db (sqlite3 *db) {
     const char *new_fa =
-        "CREATE TABLE FA ("
+        "CREATE TABLE IF NOT EXISTS FA ("
         "ID INTEGER PRIMARY KEY,"
         "CurrentVersion INTEGER," 
         "Date TEXT);";
     const char *new_ga =
-        "CREATE TABLE GA ("
+        "CREATE TABLE IF NOT EXISTS GA ("
         "ID INTEGER PRIMARY KEY,"
         "CurrentVersion INTEGER," 
         "Date TEXT);";
     const char *new_ar =
-        "CREATE TABLE AR ("
+        "CREATE TABLE IF NOT EXISTS AR ("
         "ID INTEGER PRIMARY KEY,"
         "CurrentVersion INTEGER," 
         "Date TEXT);";
