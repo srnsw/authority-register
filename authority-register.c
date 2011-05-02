@@ -35,15 +35,14 @@
 
 // Find the executable's directory path
 bstring local_dir(char *argv0) {
-    bstring exe_path; 
-    bstring exe_name = bfromcstr("authority-register.exe");
-    bstring empty = bfromcstr("");
-    exe_path = bfromcstr(argv0);
-  
-    bfindreplace(exe_path, exe_name, empty, 0);
+    int a_pos;
+    bstring exe_path = bfromcstr(argv0); 
+    bstring exe_name = bfromcstr("authority-register");
+    
+    a_pos = binstrrcaseless(exe_path, blength(exe_path) - 1, exe_name);
+    btrunc(exe_path, a_pos);
    
     bdestroy(exe_name);
-    bdestroy(empty);  
     return exe_path;
 }
 
