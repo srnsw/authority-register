@@ -33,16 +33,18 @@
 #include "sqlite3/sqlite3.h"
 #include "bstring/bstrlib.h"
 
-// Find the executable's directory path
-bstring local_dir(char *argv0) {
+// Find the executable's directory. 
+bstring local_dir() {
     int a_pos;
-    bstring exe_path = bfromcstr(argv0); 
-    bstring exe_name = bfromcstr("authority-register");
+    int sep = '\\';
+    char exe_buffer[MAX_PATH];
+    bstring exe_path;
     
-    a_pos = binstrrcaseless(exe_path, blength(exe_path) - 1, exe_name);
-    btrunc(exe_path, a_pos);
+    GetModuleFileName(NULL, exe_buffer, sizeof(exe_buffer));
+    exe_path = bfromcstr(exe_buffer); 
+    a_pos = bstrrchr(exe_path, sep);
+    btrunc(exe_path, ++a_pos);
    
-    bdestroy(exe_name);
     return exe_path;
 }
 
@@ -325,7 +327,7 @@ int main (int argc, char **argv) {
         "(Seed the AR/FA/GA tables with numbers up to) -s FA249\n";
     int c;
      
-    exe_path = local_dir(argv[0]);
+    exe_path = local_dir();
     db_file_path = bstrcpy(exe_path);
     bcatcstr(db_file_path, "authority-register.db");
     // if no database exists, try to create it, otherwise open up the existing db
